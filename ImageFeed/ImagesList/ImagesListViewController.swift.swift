@@ -12,11 +12,11 @@ final class ImagesListViewController: UIViewController {
     }
     
     private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd MMMM yyyy"
+            formatter.locale = Locale(identifier: "ru_RU")
+            return formatter
+        }()
 }
 
 extension ImagesListViewController: UITableViewDelegate {
@@ -59,7 +59,7 @@ extension ImagesListViewController {
         cell.cellImage.image = picture
         cell.dateLabel.text = dateFormatter.string(from: Date())
         
-        let isLiked = indexPath.row % 2 == 0
+        let isLiked = indexPath.row % 2 != 0
         let likeImage = isLiked ? UIImage(named: "red like") : UIImage(named: "gray like")
         cell.likeButton.setImage(likeImage, for: .normal)
     }
