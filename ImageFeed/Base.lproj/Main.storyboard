@@ -114,6 +114,9 @@
                                     <constraint firstAttribute="height" constant="24" id="sLJ-ds-HsJ"/>
                                 </constraints>
                                 <state key="normal" image="Exit"/>
+                                <connections>
+                                    <action selector="didTapLogOutButton:" destination="xVh-5G-Oce" eventType="touchUpInside" id="HTw-Di-VdE"/>
+                                </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Photo" translatesAutoresizingMaskIntoConstraints="NO" id="etN-Tt-P6p">
                                 <rect key="frame" x="16" y="76" width="70" height="70"/>
@@ -165,8 +168,15 @@
                             <constraint firstItem="8xY-d6-SRR" firstAttribute="trailing" secondItem="10f-5S-B9t" secondAttribute="trailing" constant="16" id="z06-Q3-kvo"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="avatarImageView" destination="etN-Tt-P6p" id="PUu-rz-9fH"/>
+                        <outlet property="descriptionLable" destination="0X5-Xh-nVj" id="h2M-rq-WZy"/>
+                        <outlet property="exitButton" destination="PYD-3s-YVm" id="NHy-rP-DCk"/>
+                        <outlet property="usernameLable" destination="10f-5S-B9t" id="mtR-BY-caU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ESp-4u-kvk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <navigationItem title="Title" id="0xP-EM-Iw6" userLabel="Navigatiob Item"/>
             </objects>
             <point key="canvasLocation" x="-683" y="92"/>
         </scene>
