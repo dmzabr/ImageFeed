@@ -191,8 +191,8 @@
                         </tabBarAppearance>
                     </tabBar>
                     <connections>
-                        <segue destination="xVh-5G-Oce" kind="relationship" relationship="viewControllers" id="6pg-d4-IFv"/>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="4R7-DA-JV1"/>
+                        <segue destination="xVh-5G-Oce" kind="relationship" relationship="viewControllers" id="6pg-d4-IFv"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V3s-NC-KCI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

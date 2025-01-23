@@ -11,11 +11,11 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let profileImageView = makeProfileImageView()
-        let nameLabel = makeNameLabel()
-        let nicknameLabel = makeNicknameLabel()
-        let descriptionLabel = makeDescriptionLabel()
-        let exitButton = makeExitButton()
+//        let profileImageView = makeProfileImageView()
+//        let nameLabel = makeNameLabel()
+//        let nicknameLabel = makeNicknameLabel()
+//        let descriptionLabel = makeDescriptionLabel
+//        let exitButton = makeExitButton()
         
         view.addSubview(profileImageView)
         view.addSubview(nameLabel)
@@ -48,36 +48,34 @@ class ProfileViewController: UIViewController {
             exitButton.heightAnchor.constraint(equalToConstant: 24),
             exitButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 99),
             exitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            
-            
         ])
     }
     
-    func makeProfileImageView() -> UIImageView {
+    private lazy var profileImageView: UIImageView = {
         let profileImage = UIImage(named: "Photo")
         let imageView = UIImageView(image: profileImage)
         return imageView
-    }
+    }()
     
-    func makeNameLabel() -> UILabel {
+    private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Екатерина Новикова"
         label.textColor = .white
         label.font = .boldSystemFont(ofSize: 23)
         
         return label
-    }
+    }()
     
-    func makeNicknameLabel() -> UILabel {
+    private lazy var nicknameLabel: UILabel = {
         let label = UILabel()
         label.text = "@ekaterina_nov"
         label.textColor = #colorLiteral(red: 0.7369984984, green: 0.7409694791, blue: 0.7575188279, alpha: 1)
         label.font = .systemFont(ofSize: 13)
         
         return label
-    }
+    }()
     
-    func makeDescriptionLabel() -> UILabel {
+    private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Hello World!"
         label.textColor = .white
@@ -85,25 +83,20 @@ class ProfileViewController: UIViewController {
         
         return label
         
-    }
+    }()
     
-    func makeExitButton() -> UIButton {
+    private lazy var exitButton: UIButton = {
         guard let image = UIImage(named: "Exit") else { return UIButton() }
         let button = UIButton.systemButton(
             with: image,
             target: self,
             action: #selector(Self.didTapExitButton))
-        
         button.tintColor = #colorLiteral(red: 0.9771148562, green: 0.5101671815, blue: 0.4975126386, alpha: 1)
         
         return button
+    }()
+    
+    @objc private func didTapExitButton() {
         
     }
-    
-    @objc func didTapExitButton() {
-        
-    }
-    
-
-
 }
