@@ -11,12 +11,6 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        let profileImageView = makeProfileImageView()
-//        let nameLabel = makeNameLabel()
-//        let nicknameLabel = makeNicknameLabel()
-//        let descriptionLabel = makeDescriptionLabel
-//        let exitButton = makeExitButton()
-        
         view.addSubview(profileImageView)
         view.addSubview(nameLabel)
         view.addSubview(nicknameLabel)
