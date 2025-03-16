@@ -28,10 +28,15 @@ final class OAuth2Service {
                 do {
                     let response = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
                     self.tokenStorage.token = response.access_token
-                    completion(.success(response.access_token))
+                    DispatchQueue.main.async {
+                        completion(.success(response.access_token))
+                    }
+                    
                 } catch {
-                    print("Decoding error: \(error)")
-                    completion(.failure(error))
+                    DispatchQueue.main.async {
+                        print("Decoding error: \(error)")
+                        completion(.failure(error))
+                    }
                 }
                 
             case .failure(let error):
@@ -42,21 +47,22 @@ final class OAuth2Service {
     }
     
     func makeOAuthTokenRequest(code: String) -> URLRequest {
-        guard let baseURL = URL(string: "https://unsplash.com") else {
-            return URLRequest(url: URL(string: "")!)
+        let baseURL = URL(string: "https://unsplash.com")
+        
+        
+        guard let url = URL(
+            string: "/oauth/token"
+            + "?client_id=\(Constants.accessKey)"         // Используем знак ?, чтобы начать перечисление параметров запроса
+            + "&&client_secret=\(Constants.secretKey)"    // Используем &&, чтобы добавить дополнительные параметры
+            + "&&redirect_uri=\(Constants.redirectURI)"
+            + "&&code=\(code)"
+            + "&&grant_type=authorization_code",
+            relativeTo: baseURL                           // Опираемся на основной или базовый URL, которые содержат схему и имя хоста
+        ) else {
+            print("Ошибка")
+            return URLRequest(url: Constants.defaultBaseURL)
         }
-         guard let url = URL(
-             string: "/oauth/token"
-             + "?client_id=\(Constants.accessKey)"         // Используем знак ?, чтобы начать перечисление параметров запроса
-             + "&&client_secret=\(Constants.secretKey)"    // Используем &&, чтобы добавить дополнительные параметры
-             + "&&redirect_uri=\(Constants.redirectURI)"
-             + "&&code=\(code)"
-             + "&&grant_type=authorization_code",
-             relativeTo: baseURL                           // Опираемся на основной или базовый URL, которые содержат схему и имя хоста
-         ) else {
-             return URLRequest(url: URL(string: "")!)
-         }
-         var request = URLRequest(url: url)
+        var request = URLRequest(url: url)
          request.httpMethod = "POST"
          return request
      }
