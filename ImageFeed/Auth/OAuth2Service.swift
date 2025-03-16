@@ -8,7 +8,7 @@
 import Foundation
 
 struct OAuthTokenResponseBody: Decodable {
-    let access_token: String
+    let accessToken: String
 }
 
 final class OAuth2Service {
@@ -27,9 +27,9 @@ final class OAuth2Service {
             case .success(let data):
                 do {
                     let response = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-                    self.tokenStorage.token = response.access_token
+                    self.tokenStorage.token = response.accessToken
                     DispatchQueue.main.async {
-                        completion(.success(response.access_token))
+                        completion(.success(response.accessToken))
                     }
                     
                 } catch {

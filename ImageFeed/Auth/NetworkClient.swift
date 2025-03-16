@@ -44,7 +44,7 @@ struct NetworkClient {
         // let request = URLRequest(url: url)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
+            if let error {
                 handler(.failure(error))
                 return
             }
@@ -55,7 +55,7 @@ struct NetworkClient {
                 return
             }
             
-            guard let data = data else {
+            guard let data else {
                 handler(.failure(NSError(domain: "", code: -1, userInfo: nil)))
                 return
             }
