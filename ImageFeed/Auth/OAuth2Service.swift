@@ -9,6 +9,10 @@ import Foundation
 
 struct OAuthTokenResponseBody: Decodable {
     let accessToken: String
+    
+    enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+    }
 }
 
 final class OAuth2Service {
@@ -40,8 +44,10 @@ final class OAuth2Service {
                 }
                 
             case .failure(let error):
-                print("Request error: \(error)")
-                completion(.failure(error))
+                DispatchQueue.main.async {
+                    print("Request error: \(error)")
+                    completion(.failure(error))
+                }
             }
         }
     }
@@ -59,7 +65,7 @@ final class OAuth2Service {
             + "&&grant_type=authorization_code",
             relativeTo: baseURL                           // Опираемся на основной или базовый URL, которые содержат схему и имя хоста
         ) else {
-            print("Ошибка")
+            print("URL error")
             return URLRequest(url: Constants.defaultBaseURL)
         }
         var request = URLRequest(url: url)
