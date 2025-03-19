@@ -24,7 +24,10 @@ final class OAuth2Service {
     private init() {}
     
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        let request = makeOAuthTokenRequest(code: code)
+        guard let request = makeOAuthTokenRequest(code: code) else {
+            print("Ошибка при создании запроса")
+            return
+        }
         
         networkClient.data(request: request) { result in
             switch result {
@@ -52,24 +55,27 @@ final class OAuth2Service {
         }
     }
     
-    func makeOAuthTokenRequest(code: String) -> URLRequest {
-        let baseURL = URL(string: "https://unsplash.com")
-        
+    func makeOAuthTokenRequest(code: String) -> URLRequest? {
+        guard let baseURL = URL(string: "https://unsplash.com") else {
+            print("Ошибка: невозможно создать базовый URL")
+            return nil
+        }
         
         guard let url = URL(
             string: "/oauth/token"
-            + "?client_id=\(Constants.accessKey)"         // Используем знак ?, чтобы начать перечисление параметров запроса
-            + "&&client_secret=\(Constants.secretKey)"    // Используем &&, чтобы добавить дополнительные параметры
+            + "?client_id=\(Constants.accessKey)"
+            + "&&client_secret=\(Constants.secretKey)"
             + "&&redirect_uri=\(Constants.redirectURI)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
-            relativeTo: baseURL                           // Опираемся на основной или базовый URL, которые содержат схему и имя хоста
+            relativeTo: baseURL
         ) else {
-            print("URL error")
-            return URLRequest(url: Constants.defaultBaseURL)
+            print("Ошибка: невозможно создать URL запроса")
+            return nil
         }
+        
         var request = URLRequest(url: url)
-         request.httpMethod = "POST"
-         return request
-     }
+        request.httpMethod = "POST"
+        return request
+    }
 }
