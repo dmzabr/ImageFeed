@@ -10,19 +10,41 @@ import UIKit
 
 final class SplashViewController: UIViewController {
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
-
-    private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
+    private var isFetchingProfile = false
+    private var profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
+    
+    private let logoImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "splash_screen_logo"))
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        makeLayout()
+    }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if oauth2TokenStorage.token != nil {
-            switchToTabBarController()
+        if let token = oauth2TokenStorage.token {
+            fetchOAuthToken(token)
         } else {
-            // Show Auth Screen
-            performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
+            showAuthViewController()
         }
+    }
+    
+    private func makeLayout() {
+        view.backgroundColor = .white
+        view.addSubview(logoImageView)
+        
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -35,18 +57,28 @@ final class SplashViewController: UIViewController {
     }
 
     private func switchToTabBarController() {
-        // Получаем экземпляр `window` приложения
-        guard let window = UIApplication.shared.windows.first else {
-            assertionFailure("Invalid window configuration")
-            return
+        DispatchQueue.main.async {
+            guard let window = UIApplication.shared.windows.first else {
+                assertionFailure("Invalid window configuration")
+                return
+            }
+        
+            let tabBarController = UIStoryboard(name: "Main", bundle: .main)
+                .instantiateViewController(withIdentifier: "TabBarViewController")
+            window.rootViewController = tabBarController
+        }
+           
+    }
+    
+    private func showAuthViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: .main)
+        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
+            fatalError("AuthViewController not found in storyboard")
         }
         
-        // Создаём экземпляр нужного контроллера из Storyboard с помощью ранее заданного идентификатора
-        let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-            .instantiateViewController(withIdentifier: "TabBarViewController")
-           
-        // Установим в `rootViewController` полученный контроллер
-        window.rootViewController = tabBarController
+        authViewController.delegate = self
+        authViewController.modalPresentationStyle = .fullScreen
+        present(authViewController, animated: true)
     }
 }
 
@@ -72,15 +104,31 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
 
     private func fetchOAuthToken(_ code: String) {
-        oauth2Service.fetchOAuthToken(code: code) { [weak self] result in
+        guard !isFetchingProfile else { return }
+        isFetchingProfile = true
+        
+        DispatchQueue.main.async {
+            UIBlockingProgressHUD.show()
+        }
+        
+        profileService.fetchProfile(code) { [weak self] result in
             guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                UIBlockingProgressHUD.dismiss()
+            }
+                
             switch result {
-            case .success:
-                self.switchToTabBarController()
-            case .failure:
-                // TODO [Sprint 11]
-                break
+            case .success(let profile):
+                // После успешной загрузки профиля вызываем метод для получения аватарки
+                self.profileImageService.fetchProfileImageURL(username: profile.username) { _ in
+                    self.switchToTabBarController()
+                }
+            case .failure(let error):
+                // Показываем ошибку
+                print("Ошибка получения картинки: \(error)")
             }
         }
+        
     }
 }
