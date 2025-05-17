@@ -50,7 +50,6 @@ final class SingleImageViewController: UIViewController {
         scrollView.maximumZoomScale = 1.25
         
         rescaleAndCenterImageInScrollView(image: image)
-        
     }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
@@ -78,7 +77,6 @@ final class SingleImageViewController: UIViewController {
         
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
-    
 }
 
 extension SingleImageViewController: UIScrollViewDelegate {

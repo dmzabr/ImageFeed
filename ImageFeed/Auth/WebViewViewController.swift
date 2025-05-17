@@ -17,8 +17,6 @@ final class WebViewViewController: UIViewController {
     
     private var estimatedProgressObservation: NSKeyValueObservation?
     
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("WebViewViewController запущен")

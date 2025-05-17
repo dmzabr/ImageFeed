@@ -180,7 +180,7 @@
         <!--Log In View Controller-->
         <scene sceneID="lYg-oQ-7yx">
             <objects>
-                <viewController id="eTA-fv-6qK" userLabel="Log In View Controller" customClass="AuthViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AuthViewController" id="eTA-fv-6qK" userLabel="Log In View Controller" customClass="AuthViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bfu-dZ-iW0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -211,8 +211,7 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="didTapLogInButton:" destination="64C-H2-17b" eventType="touchUpInside" id="mta-b3-J5A"/>
-                                    <segue destination="pfZ-AQ-llg" kind="presentation" identifier="ShowWebView" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="y1p-7r-6zQ"/>
+                                    <segue destination="pfZ-AQ-llg" kind="show" identifier="ShowWebView" id="Dol-ub-os1"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -228,12 +227,8 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="0os-Fg-lXU"/>
-                    <connections>
-                        <outlet property="loginButton" destination="8pG-0Y-bCN" id="HyS-AW-nEs"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fMc-kp-ifS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="64C-H2-17b" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-193" y="-1364"/>
         </scene>
@@ -246,7 +241,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C97-xn-eOT">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <rect key="frame" x="0.0" y="94" width="375" height="718"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -254,7 +249,7 @@
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3x8-0m-o1G">
-                                <rect key="frame" x="9" y="9" width="24" height="24"/>
+                                <rect key="frame" x="9" y="103" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="LOZ-wZ-lOH"/>
                                     <constraint firstAttribute="width" constant="24" id="ktc-Dt-IrC"/>
@@ -267,7 +262,7 @@
                                 </connections>
                             </button>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="T5R-Ed-UdX">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="4"/>
+                                <rect key="frame" x="0.0" y="94" width="375" height="4"/>
                                 <color key="tintColor" name="YP Black"/>
                             </progressView>
                         </subviews>
@@ -298,7 +293,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="KOX-9d-jra">
             <objects>
-                <tabBarController storyboardIdentifier="TabBarViewController" id="JpO-7n-lfG" customClass="TabBarController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" interactionActivityTrackingBaseName="TabBarController" id="JpO-7n-lfG" customClass="TabBarController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="aak-kc-Lgi"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="1gx-Lz-1Ec">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>

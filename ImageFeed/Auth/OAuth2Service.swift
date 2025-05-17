@@ -24,38 +24,34 @@ final class OAuth2Service {
         self.lastCode = lastCode
     }
     
-    func fetchOAuthToken(code: String, handler: @escaping (Result<String, Error>) -> Void) {
+    func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
-        if task != nil {
-            if lastCode != code {
-                task?.cancel()
-            } else {
-                handler(.failure(AuthServiceError.invalidRequest))
-                return
-            }
-        } else {
-            if lastCode == code {
-                handler(.failure(AuthServiceError.invalidRequest))
-                return
-            }
-        }
-        lastCode = code
-        guard let request = makeOAuthTokenRequest(code: code) else {
-            handler(.failure(AuthServiceError.invalidRequest))
+
+        if lastCode == code {
+            completion(.failure(AuthServiceError.invalidRequest))
             return
         }
-        
-        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
-            guard let self = self else { return }
-            
+        task?.cancel()
+        lastCode = code
+        guard let request = makeOAuthTokenRequest(code: code) else {
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+
+        let task = urlSession.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
             switch result {
             case .success(let tokenResponse):
-                self.tokenStorage.token = tokenResponse.accessToken
-                self.complete(code: code, with: .success(tokenResponse.accessToken))
+//                self.tokenStorage.token = tokenResponse.accessToken
+                print("Успешно получен и сохранен токен: \(tokenResponse.accessToken)")
+                completion(.success(tokenResponse.accessToken))
             case .failure(let error):
-                self.complete(code: code, with: .failure(error))
+                print("[OAuth2Service.fetchOAuthToken]: Ошибка получения токена — \(error.localizedDescription)")
+                completion(.failure(error))
             }
+            self.task = nil
+            self.lastCode = nil
         }
+        self.task = task
         task.resume()
     }
     
