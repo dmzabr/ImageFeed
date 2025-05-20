@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -55,6 +55,9 @@
                                                     <state key="normal" image="red like">
                                                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="isTappedLike:" destination="EcB-zF-IzW" eventType="touchUpInside" id="jCL-cg-kVr"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" name="YP Black"/>
@@ -128,7 +131,7 @@
                                 </connections>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8v1-8p-oSu" userLabel="BackButton">
-                                <rect key="frame" x="8" y="8" width="48" height="48"/>
+                                <rect key="frame" x="8" y="58" width="48" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="D4R-OB-7h2"/>
                                     <constraint firstAttribute="width" constant="48" id="j25-Uj-e2w"/>
@@ -140,7 +143,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="47F-sh-1QX" userLabel="ShareButton">
-                                <rect key="frame" x="162.66666666666666" y="712" width="50" height="50"/>
+                                <rect key="frame" x="162.66666666666666" y="678" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="JTb-B1-Abw"/>
                                     <constraint firstAttribute="height" constant="50" id="Nqa-Gy-mi8"/>
@@ -241,7 +244,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C97-xn-eOT">
-                                <rect key="frame" x="0.0" y="94" width="375" height="718"/>
+                                <rect key="frame" x="0.0" y="144" width="375" height="668"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -249,7 +252,7 @@
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3x8-0m-o1G">
-                                <rect key="frame" x="9" y="103" width="24" height="24"/>
+                                <rect key="frame" x="9" y="153" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="LOZ-wZ-lOH"/>
                                     <constraint firstAttribute="width" constant="24" id="ktc-Dt-IrC"/>
@@ -262,7 +265,7 @@
                                 </connections>
                             </button>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="T5R-Ed-UdX">
-                                <rect key="frame" x="0.0" y="94" width="375" height="4"/>
+                                <rect key="frame" x="0.0" y="144" width="375" height="4"/>
                                 <color key="tintColor" name="YP Black"/>
                             </progressView>
                         </subviews>
@@ -317,7 +320,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="9vs-eK-dqr"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="sfC-8S-AWp">
-                        <rect key="frame" x="0.0" y="50" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="100" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

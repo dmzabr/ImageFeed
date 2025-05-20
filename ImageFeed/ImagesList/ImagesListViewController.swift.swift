@@ -1,9 +1,10 @@
 import UIKit
 
 final class ImagesListViewController: UIViewController {
+    
     @IBOutlet private var tableView: UITableView!
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
-    
+    private var photos: [Photo] = []
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     
     override func viewDidLoad() {
@@ -56,7 +57,7 @@ extension ImagesListViewController: UITableViewDelegate {
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photosName.count
+        return photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -65,7 +66,7 @@ extension ImagesListViewController: UITableViewDataSource {
         guard let imageListCell = cell as? ImagesListCell else {
             return UITableViewCell()
         }
-        
+        imageListCell.delegate = self
         configCell(for: imageListCell, with: indexPath)
         return imageListCell
     }
@@ -73,13 +74,26 @@ extension ImagesListViewController: UITableViewDataSource {
 
 extension ImagesListViewController {
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        guard let picture = UIImage(named: photosName[indexPath.row]) else { return }
+        let photo = photos[indexPath.row]
         
-        cell.cellImage.image = picture
-        cell.dateLabel.text = dateFormatter.string(from: Date())
+        let url = URL(string: photo.largeImageURL)
+        cell.setImage(with: url)
         
-        let isLiked = indexPath.row % 2 != 0
-        let likeImage = isLiked ? UIImage(named: "red like") : UIImage(named: "gray like")
-        cell.likeButton.setImage(likeImage, for: .normal)
+        let date = photo.createdAt.map { dateFormatter.string(from: $0) } ?? "—"
+        let isLiked = photo.isLiked
+        let model = ImagesListCellModel(imageURL: url, date: date, isLiked: isLiked)
+        cell.configure(with: model)
+    }
+}
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        
+        var photo = photos[indexPath.row]
+        photo.isLiked.toggle()
+        
+        photos[indexPath.row] = photo
+        cell.setIsLiked(photo.isLiked)
     }
 }
