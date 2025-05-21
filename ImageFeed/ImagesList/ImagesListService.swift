@@ -9,32 +9,25 @@ import Foundation
 
 final class ImagesListService {
     private(set) var photos: [Photo] = []
-    static let shared = ImagesListService()
+    private static let shared = ImagesListService()
     static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
     private var lastLoadedPage: Int?
     private var task: URLSessionTask?
     private let tokenStorage: OAuth2TokenStorage
     private let session: URLSession
     private let decoder = JSONDecoder()
-    
-
-    
-
     private var isLoading = false
     private var currentPage = 0
-
-    
-    
     
     init(tokenStorage: OAuth2TokenStorage = OAuth2TokenStorage(), session: URLSession = .shared) {
         self.tokenStorage = tokenStorage
         self.session = session
         self.decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
-
+    
     func fetchPhotosNextPage() {
         guard !isLoading else { return }
-    
+        
         guard let token = tokenStorage.token else {
             print("Ошибка: отсутствует токен")
             return
@@ -91,23 +84,27 @@ final class ImagesListService {
                 print("Ошибка декодирования: \(error.localizedDescription)")
             }
         }
-        
         task.resume()
     }
     
     private func convertToPhoto(from result: PhotoResult) -> Photo {
-        let size = CGSize(width: result.width, height: result.height)
-        let createdAt = result.createdAt.flatMap { ISO8601DateFormatter().date(from: $0) } ?? Date()
+        let date = isoDateFormatter.date(from: result.createdAt ?? "" )
         return Photo(
             id: result.id,
-            size: size,
-            createdAt: createdAt,
+            size: CGSize(width: result.width, height: result.height),
+            createdAt: date,
             description: result.description,
             thumbImageURL: result.urls.thumb,
             largeImageURL: result.urls.full,
             isLiked: result.likedByUser
         )
     }
+    
+    private let isoDateFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter
+    }()
     
     private func makePhotosRequest(page: Int, perPage: Int) -> URLRequest? {
         var components = URLComponents()
@@ -163,15 +160,8 @@ final class ImagesListService {
             DispatchQueue.main.async {
                 if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
                     let photo = self.photos[index]
-                    let newPhoto = Photo(
-                        id: photo.id,
-                        size: photo.size,
-                        createdAt: photo.createdAt,
-                        description: photo.description,
-                        thumbImageURL: photo.thumbImageURL,
-                        largeImageURL: photo.largeImageURL,
-                        isLiked: !photo.isLiked
-                    )
+                    let newPhoto = Photo(from: photo)
+                    
                     
                     self.photos[index] = newPhoto
                     
@@ -187,7 +177,7 @@ final class ImagesListService {
         
         task.resume()
     }
-
+    
     private struct LikeResponse: Decodable {
         let photo: PhotoLikeState
         struct PhotoLikeState: Decodable {
@@ -196,49 +186,4 @@ final class ImagesListService {
     }
 }
 
-public struct Photo {
-    let id: String
-    let size: CGSize
-    let createdAt: Date?
-    let description: String?
-    let thumbImageURL: String
-    let largeImageURL: String
-    var isLiked: Bool
-}
 
-struct PhotoResult: Codable {
-    let id: String
-    let width: Int
-    let height: Int
-    let createdAt: String?
-    let description: String?
-    let urls: PhotoURLs
-    let likedByUser: Bool
-}
-
-struct PhotoURLs: Codable {
-    let thumb: String
-    let full: String
-}
-
-extension ImagesListService {
-    func convertToPhotos(from photoResults: [PhotoResult]) -> [Photo] {
-        return photoResults.compactMap { photoResult in
-            let createdAt = photoResult.createdAt.flatMap {
-                ISO8601DateFormatter().date(from: $0)
-            }
-            
-            let size = CGSize(width: photoResult.width, height: photoResult.height)
-            
-            return Photo(
-                id: photoResult.id,
-                size: size,
-                createdAt: createdAt,
-                description: photoResult.description,
-                thumbImageURL: photoResult.urls.thumb,
-                largeImageURL: photoResult.urls.full,
-                isLiked: photoResult.likedByUser
-            )
-        }
-    }
-}

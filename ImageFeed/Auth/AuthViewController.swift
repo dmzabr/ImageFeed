@@ -74,12 +74,14 @@ extension AuthViewController: WebViewViewControllerDelegate {
 
 extension AuthViewController {
     private func showLoading() {
-        isLoading = true
+        self.isLoading = true
         UIBlockingProgressHUD.show()
+        
     }
     
     private func hideLoading() {
-        isLoading = false
+        self.isLoading = false
         ProgressHUD.dismiss()
+
     }
 }

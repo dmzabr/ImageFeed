@@ -81,18 +81,16 @@ final class SingleImageViewController: UIViewController {
     
     private func loadImage() {
         guard let imageURL else { return }
-        DispatchQueue.main.async {
-            UIBlockingProgressHUD.show()
-            self.imageView.kf.setImage(with: imageURL) { [weak self] result in
-                UIBlockingProgressHUD.dismiss()
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let imageResult):
-                    self.image = imageResult.image
-                case .failure:
-                    self.showError()
-                }
+        UIBlockingProgressHUD.show()
+        self.imageView.kf.setImage(with: imageURL) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let imageResult):
+                self.image = imageResult.image
+            case .failure:
+                self.showError()
             }
         }
     }

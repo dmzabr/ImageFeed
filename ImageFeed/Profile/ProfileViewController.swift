@@ -45,39 +45,21 @@ class ProfileViewController: UIViewController {
         removeObserver()
     }
     
+    private func addObserver() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateAvatar(notification:)),
+            name: ProfileImageService.didChangeNotification,
+            object: nil
+        )
+    }
+    
     private func removeObserver() {
         NotificationCenter.default.removeObserver(
             self,
             name: ProfileImageService.didChangeNotification,
             object: nil
         )
-    }
-    
-    private func updateAvatar(notification: Notification) {
-        guard
-            isViewLoaded,
-            let userInfo = notification.userInfo,
-            let profileImageURL = userInfo["URL"] as? String,
-            let url = URL(string: profileImageURL)
-        else { return }
-        
-        profileImageView.kf.setImage(
-            with: url,
-            placeholder: UIImage(named: "placeholder"),
-            options: [
-                .transition(.fade(0.3)),
-                .cacheOriginalImage
-            ]
-        ) { result in
-            switch result {
-            case .success:
-                print("Аватарка успешно обновлена!")
-            case .failure(let error):
-                print("Ошибка загрузки аватарки: \(error.localizedDescription)")
-                
-                print("Получено уведомление об обновлении аватарки:", notification.userInfo ?? "пустой userInfo")
-            }
-        }
     }
     
     private lazy var nameLabel: UILabel = {
@@ -136,7 +118,7 @@ class ProfileViewController: UIViewController {
     
     @objc private func didTapExitButton() {
         let logOutService = ProfileLogoutService.shared
-        logOutService.logout()
+        logOutService.showLogoutAlert(from: self)
         
     }
     
@@ -151,9 +133,37 @@ class ProfileViewController: UIViewController {
                 switch result {
                 case .success(let profile):
                     self?.updateProfileUI(with: profile)
+                    
                 case .failure(let error):
                     print("Ошибка загрузки профиля: \(error.localizedDescription)")
                 }
+            }
+        }
+    }
+    
+    @objc private func updateAvatar(notification: Notification) {
+        guard
+            isViewLoaded,
+            let userInfo = notification.userInfo,
+            let profileImageURL = userInfo["URL"] as? String,
+            let url = URL(string: profileImageURL)
+        else { return }
+        
+        profileImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "placeholder"),
+            options: [
+                .transition(.fade(0.3)),
+                .cacheOriginalImage
+            ]
+        ) { result in
+            switch result {
+            case .success:
+                print("Аватарка успешно обновлена!")
+            case .failure(let error):
+                print("Ошибка загрузки аватарки: \(error.localizedDescription)")
+                
+                print("Получено уведомление об обновлении аватарки:", notification.userInfo ?? "пустой userInfo")
             }
         }
     }
@@ -162,6 +172,19 @@ class ProfileViewController: UIViewController {
         nameLabel.text = profile.name
         nicknameLabel.text = profile.loginName
         descriptionLabel.text = profile.bio ?? "No bio available"
+        
+        if let avatarURL = ProfileImageService.shared.avatarURL {
+            updateAvatar(with: avatarURL)
+        }
+    }
+    
+    private func updateAvatar(with urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        profileImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "placeholder"),
+            options: [.transition(.fade(0.3)), .cacheOriginalImage]
+        )
     }
     
     private func makeLayout() {

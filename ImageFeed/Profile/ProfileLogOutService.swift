@@ -36,4 +36,19 @@ final class ProfileLogoutService {
     private func clearToken() {
         OAuth2TokenStorage().token = nil
     }
+    
+    func showLogoutAlert (from viewController: UIViewController) {
+       let alert = UIAlertController(title: "Выход из аккаунта", message: "Вы уверены, что хотите выйти?", preferredStyle: .alert)
+           
+           let logoutAction = UIAlertAction(title: "Да", style: .destructive) { _ in
+               ProfileLogoutService.shared.logout()
+           }
+           
+           let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+           
+           alert.addAction(logoutAction)
+           alert.addAction(cancelAction)
+           
+       viewController.present(alert, animated: true)
+   }
 }

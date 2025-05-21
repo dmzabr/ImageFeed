@@ -114,7 +114,7 @@ extension ImagesListViewController: UITableViewDataSource {
         let url = URL(string: photo.largeImageURL)
         cell.setImage(with: url)
         
-        let date = photo.createdAt.map { dateFormatter.string(from: $0) } ?? "—"
+        let date = photo.createdAt.map { dateFormatter.string(from: $0) } ?? ""
         let isLiked = photo.isLiked
         let model = ImagesListCellModel(imageURL: url, date: date, isLiked: isLiked)
         cell.configure(with: model)
