@@ -123,6 +123,8 @@ extension ImagesListViewController: UITableViewDataSource {
 
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        UIBlockingProgressHUD.blockUI()
+        
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         
         var photo = photos[indexPath.row]
@@ -130,5 +132,6 @@ extension ImagesListViewController: ImagesListCellDelegate {
         
         photos[indexPath.row] = photo
         cell.setIsLiked(photo.isLiked)
+        UIBlockingProgressHUD.unblockUI()
     }
 }

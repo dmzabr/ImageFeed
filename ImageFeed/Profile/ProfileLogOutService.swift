@@ -38,13 +38,13 @@ final class ProfileLogoutService {
     }
     
     func showLogoutAlert (from viewController: UIViewController) {
-       let alert = UIAlertController(title: "Выход из аккаунта", message: "Вы уверены, что хотите выйти?", preferredStyle: .alert)
+       let alert = UIAlertController(title: "Пока, пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
            
-           let logoutAction = UIAlertAction(title: "Да", style: .destructive) { _ in
+           let logoutAction = UIAlertAction(title: "Да", style: .default) { _ in
                ProfileLogoutService.shared.logout()
            }
            
-           let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+        let cancelAction = UIAlertAction(title: "Нет", style: .default)
            
            alert.addAction(logoutAction)
            alert.addAction(cancelAction)
