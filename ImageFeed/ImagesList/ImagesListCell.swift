@@ -33,9 +33,16 @@ final class ImagesListCell: UITableViewCell {
     func setImage(with url: URL?) {
         cellImage.kf.setImage(
             with: url,
-            placeholder: UIImage(named: "placeholder"),
+            placeholder: UIImage(named: "Stub"),
             options: [.transition(.fade(0.3))]
         )
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        likeButton.setImage(UIImage(named: "gray_like"), for: .normal)
+        likeButton.setImage(UIImage(named: "red_like"), for: .selected)
     }
 }
 

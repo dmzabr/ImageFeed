@@ -14,22 +14,11 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            print("didChangeNotification received, updating avatar")
-            guard let self = self else { return }
-            self.updateAvatar()
-        }
-        
         view.backgroundColor = UIColor(named: "YP Black")
-    
         makeLayout()
         fetchProfileData()
-        updateAvatar()
+        profileImageView.layer.cornerRadius = 35
+        profileImageView.layer.masksToBounds = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -64,18 +53,31 @@ class ProfileViewController: UIViewController {
         )
     }
     
-    private func updateAvatar() {
-        
+    private func updateAvatar(notification: Notification) {
         guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
+            isViewLoaded,
+            let userInfo = notification.userInfo,
+            let profileImageURL = userInfo["URL"] as? String,
             let url = URL(string: profileImageURL)
         else { return }
         
         profileImageView.kf.setImage(
             with: url,
             placeholder: UIImage(named: "placeholder"),
-            options: [.transition(.fade(0.2))]
-        )
+            options: [
+                .transition(.fade(0.3)),
+                .cacheOriginalImage
+            ]
+        ) { result in
+            switch result {
+            case .success:
+                print("Аватарка успешно обновлена!")
+            case .failure(let error):
+                print("Ошибка загрузки аватарки: \(error.localizedDescription)")
+                
+                print("Получено уведомление об обновлении аватарки:", notification.userInfo ?? "пустой userInfo")
+            }
+        }
     }
     
     private lazy var nameLabel: UILabel = {
@@ -133,6 +135,8 @@ class ProfileViewController: UIViewController {
     }()
     
     @objc private func didTapExitButton() {
+        let logOutService = ProfileLogoutService.shared
+        logOutService.logout()
         
     }
     
