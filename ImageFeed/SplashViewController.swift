@@ -13,6 +13,7 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
     private var isProfileLoaded = false
+    private let profileImageService = ProfileImageService.shared
     
     private let splashScreenLogoImageView = UIImageView()
     
@@ -39,16 +40,25 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
         }
     }
     
-    private func switchToTabBarController() {
-        DispatchQueue.main.async{
+    private func switchToTabBarViewController() {
+        DispatchQueue.main.async {
             guard let window = UIApplication.shared.windows.first else {
-                assertionFailure("Invalid Configuration")
-                return
+                fatalError("Invalid Configuration")
             }
-            let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-                .instantiateViewController(withIdentifier: "TabBarViewController")
-            window.rootViewController = tabBarController
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: .main)
+            if let tabBarViewController = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? TabBarViewController {
+                window.rootViewController = tabBarViewController
+            } else {
+                self.showAlert(with: "Ошибка", message: "Не удалось загрузить главный экран")
+            }
         }
+    }
+    
+    private func showAlert(with title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 }
 
@@ -63,29 +73,24 @@ extension SplashViewController {
     }
     
     private func fetchProfile(token: String) {
+        guard !isProfileLoaded else { return }
+        isProfileLoaded = true
+        
         UIBlockingProgressHUD.show()
         
-        profileService.fetchProfile(token) { [ weak self ] result in
-            UIBlockingProgressHUD.dismiss()
-            
+        profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
+            UIBlockingProgressHUD.dismiss()
             
             switch result {
             case .success(let profile):
-                let username = profile.username
-                ProfileImageService.shared.fetchProfileImageURL(username: username) { result in
+                self.profileImageService.fetchProfileImageURL(username: profile.username) { _ in
                     
-                    switch result {
-                    case.success(let smalImage):
-                        print(smalImage)
-                    case.failure(let error):
-                        print("[SplashViewController] - \(error.localizedDescription)")
-                    }
+                    self.switchToTabBarViewController()
                 }
-                self.switchToTabBarController()
-            case.failure:
-                print("[SplashViewController] - ошибка загрузка профиля")
-                break
+            case .failure(let error):
+                
+                self.showAlert(with: "Ошибка", message: error.localizedDescription)
             }
         }
     }

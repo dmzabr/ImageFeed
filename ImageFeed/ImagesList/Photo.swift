@@ -44,7 +44,6 @@ public struct Photo {
     }
 }
 
-
 public struct PhotoResult: Codable {
     let id: String
     let width: Int

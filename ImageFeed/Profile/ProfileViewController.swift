@@ -8,17 +8,33 @@
 import UIKit
 import Kingfisher
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     var profileService = ProfileService.shared
+    var presenter: ProfilePresenterProtocol?
     private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "YP Black")
         makeLayout()
-        fetchProfileData()
-        profileImageView.layer.cornerRadius = 35
         profileImageView.layer.masksToBounds = true
+        assert(presenter != nil, "ProfilePresenter не был сконфигурирован")
+        presenter?.viewDidLoad()
+        addObserver()
+    }
+    
+    init(presenter: ProfilePresenter) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    func configure(_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+        self.presenter?.view = self
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLayoutSubviews() {
@@ -132,7 +148,7 @@ class ProfileViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let profile):
-                    self?.updateProfileUI(with: profile)
+                    self?.updateProfile(with: profile)
                     
                 case .failure(let error):
                     print("Ошибка загрузки профиля: \(error.localizedDescription)")
@@ -168,7 +184,7 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    private func updateProfileUI(with profile: Profile) {
+    func updateProfile(with profile: Profile) {
         nameLabel.text = profile.name
         nicknameLabel.text = profile.loginName
         descriptionLabel.text = profile.bio ?? "No bio available"
@@ -178,7 +194,7 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    private func updateAvatar(with urlString: String) {
+    func updateAvatar(with urlString: String) {
         guard let url = URL(string: urlString) else { return }
         profileImageView.kf.setImage(
             with: url,

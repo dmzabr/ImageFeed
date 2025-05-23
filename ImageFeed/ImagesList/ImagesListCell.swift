@@ -40,7 +40,8 @@ final class ImagesListCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        likeButton.setImage(UIImage(named: "gray_like"), for: .normal)
+
         likeButton.setImage(UIImage(named: "red_like"), for: .selected)
     }
 }
