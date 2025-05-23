@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -44,17 +44,19 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9c9-VC-mBg" userLabel="Like Button">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9c9-VC-mBg" userLabel="Like Button">
                                                     <rect key="frame" x="315" y="4" width="44" height="44"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="44" id="Ac4-VD-v2x"/>
                                                         <constraint firstAttribute="width" constant="44" id="piH-Dz-sWd"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    <state key="normal" image="red like">
+                                                    <state key="normal" image="gray_like">
                                                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="isTappedLike:" destination="EcB-zF-IzW" eventType="touchUpInside" id="jCL-cg-kVr"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" name="YP Black"/>
@@ -128,7 +130,7 @@
                                 </connections>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8v1-8p-oSu" userLabel="BackButton">
-                                <rect key="frame" x="8" y="8" width="48" height="48"/>
+                                <rect key="frame" x="8" y="58" width="48" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="D4R-OB-7h2"/>
                                     <constraint firstAttribute="width" constant="48" id="j25-Uj-e2w"/>
@@ -140,7 +142,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="47F-sh-1QX" userLabel="ShareButton">
-                                <rect key="frame" x="162.66666666666666" y="712" width="50" height="50"/>
+                                <rect key="frame" x="162.66666666666666" y="678" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="JTb-B1-Abw"/>
                                     <constraint firstAttribute="height" constant="50" id="Nqa-Gy-mi8"/>
@@ -198,7 +200,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="D3m-pk-X9R"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="SFPro-Semibold" family="SF Pro" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="tintColor" name="YP Black"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Войти">
@@ -241,7 +243,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C97-xn-eOT">
-                                <rect key="frame" x="0.0" y="94" width="375" height="718"/>
+                                <rect key="frame" x="0.0" y="144" width="375" height="668"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -249,7 +251,7 @@
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3x8-0m-o1G">
-                                <rect key="frame" x="9" y="103" width="24" height="24"/>
+                                <rect key="frame" x="9" y="153" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="LOZ-wZ-lOH"/>
                                     <constraint firstAttribute="width" constant="24" id="ktc-Dt-IrC"/>
@@ -262,7 +264,7 @@
                                 </connections>
                             </button>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="T5R-Ed-UdX">
-                                <rect key="frame" x="0.0" y="94" width="375" height="4"/>
+                                <rect key="frame" x="0.0" y="144" width="375" height="4"/>
                                 <color key="tintColor" name="YP Black"/>
                             </progressView>
                         </subviews>
@@ -317,7 +319,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="9vs-eK-dqr"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="sfC-8S-AWp">
-                        <rect key="frame" x="0.0" y="50" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="100" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -335,8 +337,8 @@
         <image name="Backward" width="24" height="24"/>
         <image name="Logo_of_Unsplash" width="60" height="60"/>
         <image name="Sharing" width="51" height="51"/>
+        <image name="gray_like" width="42" height="42"/>
         <image name="nav_back_button" width="24" height="24"/>
-        <image name="red like" width="42" height="42"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

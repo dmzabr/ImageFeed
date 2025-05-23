@@ -6,10 +6,9 @@
 //
 
 import UIKit
-@preconcurrency import WebKit
+import WebKit
 
 final class WebViewViewController: UIViewController {
-    
     weak var delegate: WebViewViewControllerDelegate?
     
     @IBOutlet private var webView: WKWebView!
