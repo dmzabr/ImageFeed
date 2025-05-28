@@ -28,11 +28,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         configurationForConnecting connectingSceneSession: UISceneSession,
         options: UIScene.ConnectionOptions
     ) -> UISceneConfiguration {
-        let sceneConfiguration = UISceneConfiguration(
+        let sceneConfiguration = UISceneConfiguration(          // 1
             name: "Main",
             sessionRole: connectingSceneSession.role
         )
-        sceneConfiguration.delegateClass = SceneDelegate.self   
+        sceneConfiguration.delegateClass = SceneDelegate.self   // 2
         return sceneConfiguration
     }
 

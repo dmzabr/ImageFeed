@@ -8,7 +8,7 @@
 import Foundation
 
 public struct Photo {
-    let id: String
+    public let id: String
     let size: CGSize
     let createdAt: Date?
     let description: String?
@@ -43,7 +43,6 @@ public struct Photo {
         self.isLiked = isLiked
     }
 }
-
 
 public struct PhotoResult: Codable {
     let id: String
