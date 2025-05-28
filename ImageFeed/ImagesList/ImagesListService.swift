@@ -58,7 +58,7 @@ final class ImagesListService: ImagesListServiceProtocol {
                 print("Ошибка загрузки фотографий: \(error.localizedDescription)")
                 return
             }
-            if let data = data, let jsonString = String(data: data, encoding: .utf8) {
+            if let data = data, let _ = String(data: data, encoding: .utf8) {
                 //print("Ответ от сервера: \(jsonString)")
             }
             if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {

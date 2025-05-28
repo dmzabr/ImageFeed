@@ -5,6 +5,8 @@
 //  Created by  Дмитрий on 22.05.2025.
 //
 
+import ImageFeed
+
 final class ImagesListServiceSpy: ImagesListServiceProtocol {
     private(set) var fetchPhotosNextPageCalled = false
     private(set) var changeLikeCalled = false
@@ -28,15 +30,7 @@ final class ImagesListServiceSpy: ImagesListServiceProtocol {
 
         if let index = photosInternal.firstIndex(where: { $0.id == photoId }) {
             let old = photosInternal[index]
-            let updated = Photo(
-                id: old.id,
-                size: old.size,
-                createdAt: old.createdAt,
-                description: old.description,
-                thumbImageURL: old.thumbImageURL,
-                largeImageURL: old.largeImageURL,
-                isLiked: !old.isLiked
-            )
+            let updated = Photo(from: old)
             photosInternal[index] = updated
         }
 

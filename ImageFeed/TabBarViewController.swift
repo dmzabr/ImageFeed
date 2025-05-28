@@ -28,6 +28,5 @@ final class TabBarViewController: UITabBarController {
             image: UIImage(named: "tab_profile_active"),
             selectedImage: UIImage(named: "tab_profile_active")
         )
-        
     }
 }

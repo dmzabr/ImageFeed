@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SplashViewController: UIViewController, AuthViewControllerDelegate {
+final class SplashViewController: UIViewController{
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
@@ -30,13 +30,13 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
             fetchProfile(token: token)
         } else {
             let storyboard = UIStoryboard(name: "Main", bundle: .main)
-            
-            let viewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController
-            guard let authViewController = viewController else { return }
-            authViewController.delegate = self
-            
-            authViewController.modalPresentationStyle = .fullScreen
-            self.present(authViewController, animated: true)
+            if let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController {
+                authViewController.delegate = self
+                authViewController.modalPresentationStyle = .fullScreen
+                present(authViewController, animated: true)
+            } else {
+                showAlert(with: "Ошибка", message: "AuthViewController не найден")
+            }
         }
     }
     
@@ -59,6 +59,19 @@ final class SplashViewController: UIViewController, AuthViewControllerDelegate {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+    
+    private func setting() {
+        splashScreenLogoImageView.image = UIImage(named: "splash_screen_logo")
+        splashScreenLogoImageView.translatesAutoresizingMaskIntoConstraints = false
+        splashScreenLogoImageView.contentMode = .scaleToFill
+        
+        view.addSubview(splashScreenLogoImageView)
+        
+        NSLayoutConstraint.activate([
+            splashScreenLogoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            splashScreenLogoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 }
 
@@ -96,17 +109,18 @@ extension SplashViewController {
     }
 }
 
-extension SplashViewController {
-    private func setting() {
-        splashScreenLogoImageView.image = UIImage(named: "splash_screen_logo")
-        splashScreenLogoImageView.translatesAutoresizingMaskIntoConstraints = false
-        splashScreenLogoImageView.contentMode = .scaleToFill
-        
-        view.addSubview(splashScreenLogoImageView)
-        
-        NSLayoutConstraint.activate([
-            splashScreenLogoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            splashScreenLogoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+extension SplashViewController: AuthViewControllerDelegate {
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
+        DispatchQueue.main.async {
+            vc.dismiss(animated: true) {
+                
+                guard let token = self.oauth2TokenStorage.token else {
+                    self.showAlert(with: "Ошибка", message: "Не удалось получить токен")
+                    return
+                }
+                
+                self.fetchProfile(token: token)
+            }
+        }
     }
 }

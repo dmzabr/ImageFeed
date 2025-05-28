@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ImageFeed
 
 final class ImagesListViewControllerSpy: ImagesListViewControllerProtocol {
     var updateTableViewCalled = false

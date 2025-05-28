@@ -26,7 +26,7 @@ final class ImageFeedUITest: XCTestCase {
             let loginTextField = webView.textFields.element
             XCTAssertTrue(loginTextField.waitForExistence(timeout: 10), "Поле логина не найдено")
             loginTextField.tap()
-            loginTextField.typeText("shabunkina.l@gmail.com")
+            loginTextField.typeText("dzabrik@yandex.ru")
 
             XCTAssertTrue(app.buttons["Done"].waitForExistence(timeout: 5), "Кнопка Done не найдена")
             app.buttons["Done"].tap()
@@ -34,7 +34,7 @@ final class ImageFeedUITest: XCTestCase {
             let passwordTextField = webView.secureTextFields.element
             XCTAssertTrue(passwordTextField.waitForExistence(timeout: 10), "Поле пароля не найдено")
             passwordTextField.tap()
-            passwordTextField.typeText("Iecnh256!")
+            passwordTextField.typeText("meGzyk-jokgu3-dimtyv")
 
             if app.buttons["Done"].exists {
                 app.buttons["Done"].tap()
@@ -89,8 +89,8 @@ final class ImageFeedUITest: XCTestCase {
         
         app.tabBars.buttons.element(boundBy: 1).tap()
         
-        XCTAssertTrue(app.staticTexts["Lyubov Shabunkina"].exists)
-        XCTAssertTrue(app.staticTexts["@shabunkina_l"].exists)
+        XCTAssertTrue(app.staticTexts["Dmitriy Zabrodskiy"].exists)
+        XCTAssertTrue(app.staticTexts["@dmzabr"].exists)
         
         app.buttons["logout button"].tap()
         app.alerts["Пока, пока!"].scrollViews.otherElements.buttons["Да"].tap()

@@ -35,7 +35,7 @@ final class ImagesListPresenterTests: XCTestCase {
         let imagesListService = ImagesListServiceSpy()
         let presenter = ImagesListPresenter(imagesListService: imagesListService)
         let view = ImagesListViewControllerSpy()
-        presenter.view = view
+        presenter.view = view as? any ImagesListViewControllerProtocol
 
         let photo = Photo(id: "1", size: CGSize(width: 100, height: 100), createdAt: nil, description: nil, thumbImageURL: "", largeImageURL: "", isLiked: false)
         imagesListService.setPhotos([photo])
@@ -47,4 +47,6 @@ final class ImagesListPresenterTests: XCTestCase {
         XCTAssertTrue(imagesListService.photos[0].isLiked, "Фото должно быть залайкано")
     }
 }
+
+
 
