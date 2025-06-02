@@ -128,6 +128,7 @@ class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
             target: self,
             action: #selector(Self.didTapExitButton))
         button.tintColor = #colorLiteral(red: 0.9771148562, green: 0.5101671815, blue: 0.4975126386, alpha: 1)
+        button.accessibilityIdentifier = "logout button"
         
         return button
     }()

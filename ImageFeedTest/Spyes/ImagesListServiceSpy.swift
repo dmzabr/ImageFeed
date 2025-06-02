@@ -30,7 +30,15 @@ final class ImagesListServiceSpy: ImagesListServiceProtocol {
 
         if let index = photosInternal.firstIndex(where: { $0.id == photoId }) {
             let old = photosInternal[index]
-            let updated = Photo(from: old)
+            let updated = Photo(
+                id: old.id,
+                size: old.size,
+                createdAt: old.createdAt,
+                description: old.description,
+                thumbImageURL: old.thumbImageURL,
+                largeImageURL: old.largeImageURL,
+                isLiked: isLike
+            )
             photosInternal[index] = updated
         }
 

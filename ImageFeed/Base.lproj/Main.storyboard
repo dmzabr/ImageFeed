@@ -46,6 +46,7 @@
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9c9-VC-mBg" userLabel="Like Button">
                                                     <rect key="frame" x="315" y="4" width="44" height="44"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="like button off"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="44" id="Ac4-VD-v2x"/>
                                                         <constraint firstAttribute="width" constant="44" id="piH-Dz-sWd"/>
@@ -202,6 +203,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8pG-0Y-bCN">
                                 <rect key="frame" x="16" y="674" width="343" height="48"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <accessibility key="accessibilityConfiguration" identifier="Login"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="D3m-pk-X9R"/>
                                 </constraints>

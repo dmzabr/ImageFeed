@@ -9,12 +9,12 @@ import Foundation
 
 public struct Photo {
     public let id: String
-    let size: CGSize
-    let createdAt: Date?
-    let description: String?
-    let thumbImageURL: String
-    let largeImageURL: String
-    var isLiked: Bool
+    public let size: CGSize
+    public let createdAt: Date?
+    public let description: String?
+    public let thumbImageURL: String
+    public let largeImageURL: String
+    public var isLiked: Bool
 
     public init(from photo: Photo) {
         self.id = photo.id

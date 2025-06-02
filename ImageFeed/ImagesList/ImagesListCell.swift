@@ -23,6 +23,7 @@ final class ImagesListCell: UITableViewCell {
     
     func setIsLiked(_ isLiked: Bool) {
         likeButton.isSelected = isLiked
+        likeButton.accessibilityIdentifier = isLiked ? "like button on" : "like button off"
     }
     func configure(with model: ImagesListCellModel) {
         setImage(with: model.imageURL)

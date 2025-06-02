@@ -12,6 +12,8 @@ final class ImagesListViewControllerSpy: ImagesListViewControllerProtocol {
     var updateTableViewCalled = false
     var reloadCellCalled = false
     var reloadIndexPath: IndexPath?
+    
+    var onReloadCellCalled: (() -> Void)? // <— новое
 
     func updateTableView() {
         updateTableViewCalled = true
@@ -20,9 +22,11 @@ final class ImagesListViewControllerSpy: ImagesListViewControllerProtocol {
     func reloadCell(at indexPath: IndexPath) {
         reloadCellCalled = true
         reloadIndexPath = indexPath
+        onReloadCellCalled?() // <— уведомление теста
     }
 
     func updateTableView(oldCount: Int) {
         updateTableViewCalled = true
     }
 }
+
