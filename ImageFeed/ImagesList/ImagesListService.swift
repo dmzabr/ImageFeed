@@ -7,17 +7,16 @@
 
 import Foundation
 
-final class ImagesListService {
+final class ImagesListService: ImagesListServiceProtocol {
+    static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
+    static let shared = ImagesListService()
+    
     private(set) var photos: [Photo] = []
-    private static let shared = ImagesListService()
-    static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
-    private var lastLoadedPage: Int?
-    private var task: URLSessionTask?
+    private var isLoading = false
+    private var currentPage = 0
     private let tokenStorage: OAuth2TokenStorage
     private let session: URLSession
     private let decoder = JSONDecoder()
-    private var isLoading = false
-    private var currentPage = 0
     
     init(tokenStorage: OAuth2TokenStorage = OAuth2TokenStorage(), session: URLSession = .shared) {
         self.tokenStorage = tokenStorage
@@ -25,9 +24,13 @@ final class ImagesListService {
         self.decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
     
+    func clearPhotos() {
+        photos.removeAll()
+    }
+    
     func fetchPhotosNextPage() {
         guard !isLoading else { return }
-        
+       // NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: self)
         guard let token = tokenStorage.token else {
             print("Ошибка: отсутствует токен")
             return
@@ -55,7 +58,7 @@ final class ImagesListService {
                 print("Ошибка загрузки фотографий: \(error.localizedDescription)")
                 return
             }
-            if let data = data, let jsonString = String(data: data, encoding: .utf8) {
+            if let data = data, let _ = String(data: data, encoding: .utf8) {
                 //print("Ответ от сервера: \(jsonString)")
             }
             if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
@@ -77,53 +80,15 @@ final class ImagesListService {
                     NotificationCenter.default.post(
                         name: ImagesListService.didChangeNotification,
                         object: nil,
-                        userInfo: ["photos": self.photos] // Передаем обновленный массив
+                        userInfo: ["photos": self.photos]
                     )
                 }
             } catch {
                 print("Ошибка декодирования: \(error.localizedDescription)")
             }
         }
+        
         task.resume()
-    }
-    
-    private func convertToPhoto(from result: PhotoResult) -> Photo {
-        let date = isoDateFormatter.date(from: result.createdAt ?? "" )
-        return Photo(
-            id: result.id,
-            size: CGSize(width: result.width, height: result.height),
-            createdAt: date,
-            description: result.description,
-            thumbImageURL: result.urls.thumb,
-            largeImageURL: result.urls.full,
-            isLiked: result.likedByUser
-        )
-    }
-    
-    private let isoDateFormatter: ISO8601DateFormatter = {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime]
-        return formatter
-    }()
-    
-    private func makePhotosRequest(page: Int, perPage: Int) -> URLRequest? {
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host   = "api.unsplash.com"
-        components.path   = "/photos"
-        components.queryItems = [
-            URLQueryItem(name: "page", value: String(page)),
-            URLQueryItem(name: "per_page", value: String(perPage))
-        ]
-        
-        guard let url = components.url else { return nil }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        
-        if let token = OAuth2TokenStorage().token {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
-        return request
     }
     
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
@@ -160,8 +125,15 @@ final class ImagesListService {
             DispatchQueue.main.async {
                 if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
                     let photo = self.photos[index]
-                    let newPhoto = Photo(from: photo)
-                    
+                    let newPhoto = Photo(
+                        id: photo.id,
+                        size: photo.size,
+                        createdAt: photo.createdAt,
+                        description: photo.description,
+                        thumbImageURL: photo.thumbImageURL,
+                        largeImageURL: photo.largeImageURL,
+                        isLiked: !photo.isLiked
+                    )
                     
                     self.photos[index] = newPhoto
                     
@@ -178,12 +150,23 @@ final class ImagesListService {
         task.resume()
     }
     
-    private struct LikeResponse: Decodable {
-        let photo: PhotoLikeState
-        struct PhotoLikeState: Decodable {
-            let liked_by_user: Bool
-        }
+    private func convertToPhoto(from result: PhotoResult) -> Photo {
+        let size = CGSize(width: result.width, height: result.height)
+        let createdAt = result.createdAt.flatMap { ISO8601DateFormatter().date(from: $0) } ?? Date()
+        return Photo(
+            id: result.id,
+            size: size,
+            createdAt: createdAt,
+            description: result.description,
+            thumbImageURL: result.urls.thumb,
+            largeImageURL: result.urls.full,
+            isLiked: result.likedByUser
+        )
     }
+}
+
+extension Notification.Name {
+    static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
 }
 
 

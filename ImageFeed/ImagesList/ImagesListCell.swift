@@ -23,6 +23,7 @@ final class ImagesListCell: UITableViewCell {
     
     func setIsLiked(_ isLiked: Bool) {
         likeButton.isSelected = isLiked
+        likeButton.accessibilityIdentifier = isLiked ? "like button on" : "like button off"
     }
     func configure(with model: ImagesListCellModel) {
         setImage(with: model.imageURL)
@@ -40,7 +41,8 @@ final class ImagesListCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        likeButton.setImage(UIImage(named: "gray_like"), for: .normal)
+
         likeButton.setImage(UIImage(named: "red_like"), for: .selected)
     }
 }

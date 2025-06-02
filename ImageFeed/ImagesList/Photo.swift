@@ -8,13 +8,13 @@
 import Foundation
 
 public struct Photo {
-    let id: String
-    let size: CGSize
-    let createdAt: Date?
-    let description: String?
-    let thumbImageURL: String
-    let largeImageURL: String
-    var isLiked: Bool
+    public let id: String
+    public let size: CGSize
+    public let createdAt: Date?
+    public let description: String?
+    public let thumbImageURL: String
+    public let largeImageURL: String
+    public var isLiked: Bool
 
     public init(from photo: Photo) {
         self.id = photo.id
@@ -43,7 +43,6 @@ public struct Photo {
         self.isLiked = isLiked
     }
 }
-
 
 public struct PhotoResult: Codable {
     let id: String
